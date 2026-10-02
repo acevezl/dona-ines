@@ -1,6 +1,6 @@
 export interface Profile {
   id: string;
-  name: string;
+  profileName: string;
   onboardingCompleted: boolean;
   createdAt: string;
   updatedAt: string;

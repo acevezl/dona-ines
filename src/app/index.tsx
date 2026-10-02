@@ -87,16 +87,29 @@ export default function WelcomeScreen() {
           disabled={!canContinue}
           onPress={() => {
             const now = new Date().toISOString();
-            profileRepository.create({
+            const existingProfile = profileRepository.getByProfileName(
+              name.trim(),
+            );
+
+            const profile = existingProfile ?? {
               id: Crypto.randomUUID(),
-              name: name.trim(),
+              profileName: name.trim(),
               onboardingCompleted: false,
               createdAt: now,
               updatedAt: now,
+            };
+
+            if (!existingProfile) {
+              profileRepository.create(profile);
+              console.log("Profile created:", profile);
+            } else {
+              console.log("Profile reused:", profile);
+            }
+
+            router.replace({
+              pathname: "/household",
+              params: { profileId: profile.id },
             });
-            // const savedProfile = profileRepository.get();
-            // console.log("Saved profile:", savedProfile);
-            router.replace("/household");
           }}
           style={{
             alignItems: "center",
